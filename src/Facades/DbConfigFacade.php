@@ -1,13 +1,13 @@
 <?php
 
-namespace Nzsakib\DbConfig;
+namespace Nzsakib\DbConfig\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Nzsakib\DbConfig\Skeleton\SkeletonClass
+ * @see \Nzsakib\DbConfig\DbConfig
  */
-class DbConfigFacade extends Facade
+class DbConfig extends Facade
 {
     /**
      * Get the registered name of the component.

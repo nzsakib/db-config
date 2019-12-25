@@ -4,5 +4,10 @@ namespace Nzsakib\DbConfig;
 
 class DbConfig
 {
-    // Build your next great package.
+    public function get()
+    {
+        return [
+            'facebook' => 'thing',
+        ];
+    }
 }

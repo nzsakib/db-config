@@ -21,7 +21,7 @@ class DbConfigServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('db-config.php'),
+                __DIR__ . '/../config/config.php' => config_path('db-config.php'),
             ], 'config');
 
             // Publishing the views.
@@ -41,6 +41,7 @@ class DbConfigServiceProvider extends ServiceProvider
 
             // Registering package commands.
             // $this->commands([]);
+            $this->insertNewConfiguration();
         }
     }
 
@@ -50,11 +51,23 @@ class DbConfigServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'db-config');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'db-config');
 
         // Register the main class to use with the facade
         $this->app->singleton('db-config', function () {
             return new DbConfig;
         });
+    }
+
+    /**
+     * Insert new configuration into the service container
+     *
+     * @return void
+     */
+    protected function insertNewConfiguration()
+    {
+        $newConfigs = (new DbConfig())->get();
+
+        $this->app->config->set($newConfigs);
     }
 }
