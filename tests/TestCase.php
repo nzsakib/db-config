@@ -13,7 +13,7 @@ class TestCase extends TestbenchTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // dd(realpath(__DIR__ . '/../src/database/factories'));
+
         $this->withFactories(realpath(__DIR__ . '/../src/database/factories'));
         // $this->loadMigrationsFrom(realpath(__DIR__ . '/../src/database/migrations'));
     }
@@ -40,8 +40,5 @@ class TestCase extends TestbenchTestCase
             'database' => ':memory:',
             'prefix' => '',
         ]);
-
-        include_once __DIR__ . '/../src/database/migrations/create_configurations_table.php';
-        (new \CreateConfigurationsTable)->up();
     }
 }

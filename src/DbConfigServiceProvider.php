@@ -16,7 +16,7 @@ class DbConfigServiceProvider extends ServiceProvider
          */
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'db-config');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'db-config');
-        // $this->loadMigrationsFrom(__DIR__ . '/../src/database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if ($this->app->runningInConsole()) {
@@ -66,8 +66,8 @@ class DbConfigServiceProvider extends ServiceProvider
      */
     protected function insertNewConfiguration()
     {
-        $newConfigs = (new DbConfig())->get();
+        // $newConfigs = (new DbConfig())->get();
 
-        $this->app->config->set($newConfigs);
+        // $this->app->config->set($newConfigs);
     }
 }

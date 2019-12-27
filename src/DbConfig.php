@@ -10,8 +10,8 @@ class DbConfig
     {
         $configs = Configuration::pluck('name')->toArray();
 
-        return [
+        config([
             'facebook' => 'thing',
-        ];
+        ]);
     }
 }
