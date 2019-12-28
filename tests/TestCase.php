@@ -15,7 +15,7 @@ class TestCase extends TestbenchTestCase
         parent::setUp();
 
         $this->withFactories(realpath(__DIR__ . '/../src/database/factories'));
-        // $this->loadMigrationsFrom(realpath(__DIR__ . '/../src/database/migrations'));
+        $this->loadMigrationsFrom(realpath(__DIR__ . '/../src/database/migrations'));
     }
 
     protected function getPackageProviders($app)

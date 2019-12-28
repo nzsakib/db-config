@@ -5,6 +5,7 @@ use Nzsakib\DbConfig\Models\Configuration;
 
 $factory->define(Configuration::class, function (Faker $faker) {
     return [
-        'name' => 'sakib',
+        'name' => $faker->word,
+        'value' => $faker->sentence,
     ];
 });

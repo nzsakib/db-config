@@ -8,10 +8,15 @@ class DbConfig
 {
     public function get()
     {
-        $configs = Configuration::pluck('name')->toArray();
+        $configs = Configuration::query()
+                ->select('name', 'value')
+                ->get()
+                ->keyBy('name')
+                ->transform(function ($config) {
+                    return $config->value;
+                })
+                ->toArray();
 
-        config([
-            'facebook' => 'thing',
-        ]);
+        return $configs;
     }
 }

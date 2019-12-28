@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \Nzsakib\DbConfig\DbConfig
  */
-class DbConfig extends Facade
+class CustomConfig extends Facade
 {
     /**
      * Get the registered name of the component.
