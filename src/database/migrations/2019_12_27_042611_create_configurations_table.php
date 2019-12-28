@@ -17,6 +17,7 @@ class CreateConfigurationsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('value');
+            $table->boolean('concat')->default(false);
             $table->timestamps();
         });
     }
