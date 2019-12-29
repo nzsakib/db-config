@@ -7,9 +7,9 @@
     <title>Test</title>
 </head>
 <body>
-    
+    <h1>hello worlsss</h1>
 
 
-    <script src="{{ realpath(__DIR__ . '../../public/js/app.js') }}"></script>
+    <script src="../../public/js/app.js"></script>
 </body>
 </html>

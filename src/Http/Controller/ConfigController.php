@@ -8,6 +8,6 @@ class ConfigController extends Controller
 {
     public function index()
     {
-        return 'hello world';
+        return view('db-config::index');
     }
 }
