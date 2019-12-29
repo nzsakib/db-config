@@ -71,4 +71,12 @@ class SetConfigTest extends TestCase
 
         $this->config->set('services', 'a random string', true);
     }
+
+    /** @test */
+    public function it_can_concat_only_with_associative_array()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->config->set('services', ['this should not be accepted'], true);
+    }
 }

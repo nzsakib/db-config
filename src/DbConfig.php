@@ -2,6 +2,7 @@
 
 namespace Nzsakib\DbConfig;
 
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Nzsakib\DbConfig\Models\Configuration;
 
@@ -27,8 +28,8 @@ class DbConfig
             throw new InvalidArgumentException('There is an existing config found with name: ' . $name);
         }
 
-        if (config($name) && !is_array($value) && $concat) {
-            throw new InvalidArgumentException('Value should be an array.');
+        if (config($name) && !is_array($value) || (is_array($value) && !Arr::isAssoc($value)) && $concat) {
+            throw new InvalidArgumentException('Value should be an associative array.');
         }
 
         return Configuration::create([
