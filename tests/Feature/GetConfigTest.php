@@ -6,6 +6,7 @@ use Nzsakib\DbConfig\Tests\TestCase;
 use Nzsakib\DbConfig\Facades\CustomConfig;
 use Nzsakib\DbConfig\Models\Configuration;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Arr;
 
 class GetConfigTest extends TestCase
 {
@@ -55,5 +56,29 @@ class GetConfigTest extends TestCase
         $config = CustomConfig::get();
 
         $this->assertCount(2, $config['guards']['web']);
+    }
+
+    /** @test */
+    public function it_can_get_only_cancated_value()
+    {
+        factory(Configuration::class)->create([
+            'name' => 'services',
+            'value' => [
+                'client' => 'client value',
+                'secret' => 'secret value',
+            ],
+            'concat' => true,
+        ]);
+
+        $config = CustomConfig::getConcat();
+
+        $this->assertCount(2, $config['services']);
+        // dd($config);
+
+        // $toMerge = Arr::dot($config);
+
+        // foreach ($toMerge as $key => $value) {
+        //     config()->set($key, $value);
+        // }
     }
 }

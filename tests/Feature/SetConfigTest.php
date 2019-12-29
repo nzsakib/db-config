@@ -79,4 +79,14 @@ class SetConfigTest extends TestCase
 
         $this->config->set('services', ['this should not be accepted'], true);
     }
+
+    /** @test */
+    public function it_cannot_merge_exising_key()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->config->set('mail', [
+            'driver' => 'existing keys overwriting, should fail',
+        ], true);
+    }
 }
