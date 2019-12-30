@@ -68,6 +68,29 @@ class DbConfig
     }
 
     /**
+     * Update a config by its primary key `id`
+     *
+     * @param integer $id
+     * @param string $name
+     * @param mixed $value
+     * @return \Nzsakib\DbConfig\Models\Configuration
+     */
+    public function updateById(int $id, string $name, $value)
+    {
+        $config = Configuration::find($id);
+
+        if (!$config) {
+            throw new Exception('The specified id does not exists in database.');
+        }
+
+        $config->name = $name;
+        $config->value = $value;
+        $config->save();
+
+        return $config;
+    }
+
+    /**
      * we dont merge if same key exists in default
      * Check each array key if existing configuration exists with same key
      *
