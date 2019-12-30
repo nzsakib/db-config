@@ -35,6 +35,13 @@ class TestCase extends TestbenchTestCase
     {
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
+        $app['config']->set('cache.default', 'redis');
+        $app['config']->set('database.redis.default', [
+            'host' => '127.0.0.1',
+            'port' => 6379,
+            'password' => null,
+            'database' => 0,
+        ]);
         $app['config']->set('database.connections.testbench', [
             'driver' => 'sqlite',
             'database' => ':memory:',

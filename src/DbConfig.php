@@ -4,6 +4,7 @@ namespace Nzsakib\DbConfig;
 
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
+use Illuminate\Support\Facades\Cache;
 use Nzsakib\DbConfig\Models\Configuration;
 
 class DbConfig
@@ -25,6 +26,27 @@ class DbConfig
                 ->toArray();
     }
 
+    /**
+     * Get flattened array of config files
+     *
+     * @return array
+     */
+    public function getCachedData(): array
+    {
+        if (config('db-config.use_cache') && $config = Cache::get($this->cacheKey())) {
+            return $config;
+        }
+
+        $configs = $this->get();
+        $flatted = Arr::dot($configs);
+
+        if (config('db-config.use_cache')) {
+            Cache::forever($this->cacheKey(), $flatted);
+        }
+
+        return $flatted;
+    }
+
     public function set(string $name, $value)
     {
         $this->mustBeAssociativeArrayWhenMerging($name, $value);
@@ -35,10 +57,14 @@ class DbConfig
             throw new InvalidArgumentException('Same name configuration exists. Please edit existing config or give it a new name.');
         }
 
-        return Configuration::create([
+        $newConfig = Configuration::create([
             'name' => $name,
             'value' => $value,
         ]);
+
+        Cache::forget($this->cacheKey());
+
+        return $newConfig;
     }
 
     /**
@@ -78,5 +104,15 @@ class DbConfig
         if (config($name) && !is_array($value) || (is_array($value) && !Arr::isAssoc($value))) {
             throw new InvalidArgumentException('Value should be an associative array when merging with existing config.');
         }
+    }
+
+    /**
+     * Get Cache key name to store in cache
+     *
+     * @return string
+     */
+    private function cacheKey(): string
+    {
+        return config('db-config.cache_key', 'app_config');
     }
 }
