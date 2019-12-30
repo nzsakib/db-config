@@ -2,6 +2,7 @@
 
 namespace Nzsakib\DbConfig;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 
 class DbConfigServiceProvider extends ServiceProvider
@@ -14,9 +15,9 @@ class DbConfigServiceProvider extends ServiceProvider
         /*
          * Optional methods to load your package assets
          */
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'db-config');
+
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'db-config');
-        // $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
 
         if ($this->app->runningInConsole()) {
@@ -33,11 +34,6 @@ class DbConfigServiceProvider extends ServiceProvider
             /*$this->publishes([
                 __DIR__.'/../resources/assets' => public_path('vendor/db-config'),
             ], 'assets');*/
-
-            // Publishing the translation files.
-            /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/db-config'),
-            ], 'lang');*/
 
             // Registering package commands.
             // $this->commands([]);
@@ -66,8 +62,11 @@ class DbConfigServiceProvider extends ServiceProvider
      */
     protected function insertNewConfiguration()
     {
-        // $newConfigs = (new DbConfig())->get();
+        // $config = (new DbConfig())->get();
+        // $toMerge = Arr::dot($config);
 
-        // $this->app->config->set($newConfigs);
+        // foreach ($toMerge as $key => $value) {
+        //     config()->set($key, $value);
+        // }
     }
 }

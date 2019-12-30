@@ -1,12 +1,12 @@
 <?php
 
-namespace Nzsakib\DbConfig\Tests\Feature;
+namespace Nzsakib\DbConfig;
 
+use Illuminate\Support\Arr;
 use Nzsakib\DbConfig\Tests\TestCase;
 use Nzsakib\DbConfig\Facades\CustomConfig;
 use Nzsakib\DbConfig\Models\Configuration;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Arr;
 
 class GetConfigTest extends TestCase
 {
@@ -61,16 +61,16 @@ class GetConfigTest extends TestCase
     /** @test */
     public function it_can_get_only_cancated_value()
     {
+        $this->withoutExceptionHandling();
         factory(Configuration::class)->create([
             'name' => 'services',
             'value' => [
                 'client' => 'client value',
                 'secret' => 'secret value',
             ],
-            'concat' => true,
         ]);
 
-        $config = CustomConfig::getConcat();
+        $config = CustomConfig::get();
 
         $this->assertCount(2, $config['services']);
         // dd($config);

@@ -1,12 +1,13 @@
 <?php
 
-namespace Nzsakib\DbConfig\Tests\Feature;
+namespace Nzsakib\DbConfig;
 
+use InvalidArgumentException;
+use Nzsakib\DbConfig\DbConfig;
 use Nzsakib\DbConfig\Tests\TestCase;
 use Nzsakib\DbConfig\Facades\CustomConfig;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use InvalidArgumentException;
-use Nzsakib\DbConfig\DbConfig;
+use Nzsakib\DbConfig\Models\Configuration;
 
 class SetConfigTest extends TestCase
 {
@@ -64,7 +65,6 @@ class SetConfigTest extends TestCase
 
         $this->assertDatabaseHas('configurations', [
             'name' => 'services',
-            'concat' => true,
         ]);
 
         $this->expectException(InvalidArgumentException::class);
@@ -88,5 +88,17 @@ class SetConfigTest extends TestCase
         $this->config->set('mail', [
             'driver' => 'existing keys overwriting, should fail',
         ], true);
+    }
+
+    /** @test */
+    public function it_throws_error_if_same_name_exists_in_db()
+    {
+        factory(Configuration::class)->create([
+            'name' => 'custom',
+            'value' => 'some value',
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->config->set('custom', 'some other value');
     }
 }
