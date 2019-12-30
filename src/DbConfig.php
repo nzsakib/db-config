@@ -8,9 +8,14 @@ use Nzsakib\DbConfig\Models\Configuration;
 
 class DbConfig
 {
-    public function get()
+    /**
+     * Get the configuration key value pairs from database to merge with config
+     *
+     * @return array
+     */
+    public function get(): array
     {
-        $configs = Configuration::query()
+        return Configuration::query()
                 ->select('name', 'value')
                 ->get()
                 ->keyBy('name')
@@ -18,8 +23,6 @@ class DbConfig
                     return $config->value;
                 })
                 ->toArray();
-
-        return $configs;
     }
 
     public function set(string $name, $value)

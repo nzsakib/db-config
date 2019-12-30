@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Configuration extends Model
 {
-    protected $fillable = ['name', 'value', 'concat'];
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->table = config('db-config.table_name');
+    }
+
+    protected $fillable = ['name', 'value'];
 
     protected $casts = [
         'value' => 'array',

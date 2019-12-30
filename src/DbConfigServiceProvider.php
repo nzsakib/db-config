@@ -19,11 +19,16 @@ class DbConfigServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'db-config');
 
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+        // $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config_path('db-config.php'),
             ], 'config');
+
+            $this->publishes([
+                __DIR__ . '/database/migrations/' => database_path('migrations'),
+            ], 'migrations');
 
             // Publishing the views.
             /*$this->publishes([
@@ -37,8 +42,9 @@ class DbConfigServiceProvider extends ServiceProvider
 
             // Registering package commands.
             // $this->commands([]);
-            $this->insertNewConfiguration();
-        }
+        } // end $this->app->runningInConsole()
+
+        $this->insertNewConfiguration();
     }
 
     /**

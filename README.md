@@ -20,6 +20,13 @@ composer require nzsakib/db-config
 ``` php
 // Usage description here
 ```
+Publish the package config and migration files
+```bash 
+php artisan vendor:publish --provider="Nzsakib\DbConfig\DbConfigServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Nzsakib\DbConfig\DbConfigServiceProvider" --tag="migrations"
+```
+
+You can change table name of the migration file, but make sure you mention the updated table name in the config file.
 
 ### Testing
 

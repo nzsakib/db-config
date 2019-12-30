@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Test</title>
+
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 </head>
 <body>
-    <h1>hello worlsss</h1>
+    
+    <div class="container">
+        <div class="row">
+            {{ dd(config()->all()) }}
+        </div>
+    </div>
 
 
-    <script src="../../public/js/app.js"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>
