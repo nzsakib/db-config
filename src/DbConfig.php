@@ -84,12 +84,12 @@ class DbConfig
      * @return \Nzsakib\DbConfig\Models\Configuration
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function updateById(int $id, string $name, $value)
+    public function updateById($id, string $name, $newValue)
     {
         $config = Configuration::findOrFail($id);
 
         $config->name = $name;
-        $config->value = $value;
+        $config->value = $newValue;
         $config->save();
 
         $this->invalidateCache();
@@ -161,7 +161,7 @@ class DbConfig
      * @return void
      * @throws InvalidArgumentException
      */
-    private function checkExistingDefaultKeys(string $name, $value)
+    protected function checkExistingDefaultKeys(string $name, $value)
     {
         if (config($name) && is_array($value)) {
             $dotArray = Arr::dot($value);
@@ -196,7 +196,7 @@ class DbConfig
      *
      * @return string
      */
-    private function cacheKey(): string
+    protected function cacheKey(): string
     {
         return config('db-config.cache_key', 'app_config');
     }
@@ -206,7 +206,7 @@ class DbConfig
      *
      * @return boolean
      */
-    private function invalidateCache(): bool
+    protected function invalidateCache(): bool
     {
         return cache()->forget($this->cacheKey());
     }

@@ -14,13 +14,96 @@ You can install the package via composer:
 ```bash
 composer require nzsakib/db-config
 ```
+`Only supported laravel framework is laravel 5.6.*`
 
 ## Usage
 
-``` php
-// Usage description here
+#### Get All Configurations as collection from DB 
+```php 
+use Nzsakib\DbConfig\DbConfig;
+
+$config = new DbConfig;
+$allConfig = $config->getCollection(); // returns Model collection of specified table
+
+// pass to blade or do your thing by looping 
+foreach($allConfig as $config) {
+    dump($config->name);
+    dump($config->value);
+}
 ```
-Publish the package config and migration files
+#### Set a new config 
+``` php
+use Nzsakib\DbConfig\DbConfig;
+
+$config = new DbConfig; 
+$name = 'facebook';
+$value = [
+    'client_id' => 'a client id',
+    'client_secret' => 'client secret',
+];
+// Value could be any data type e.g. boolean/array/string/integer
+
+try {
+    $newConfig = $config->set($name, $value); 
+    // new config is set and cache is invalidated 
+} catch (\InvalidArgumentException $e) {
+    // redirect with message $e->getMessage() 
+}
+```
+#### Update existing DB config 
+Cache will be deleted automatically after successfull update.
+```php 
+use Nzsakib\DbConfig\DbConfig;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+$config = new DbConfig;
+
+$name = 'facebook';
+$newValue = [
+    'client_id' => 'updated client id',
+    'client_secret' => 'updated secret'
+];
+
+try {
+    $updatedConfig = (new DbConfig)->updateByName($name, $newValue); 
+    // Updated model is returned 
+} catch (ModelNotFoundException $e) {
+    // Specified name does not exists in database
+}
+
+// Or you could update by `id` which is primary key 
+try {
+    $updatedConfig = (new DbConfig)->updateById($id, $name, $newValue);
+    // Updated model is returned 
+} catch (ModelNotFoundException $e) {
+    // Specified id does not exists in database
+}
+```
+
+#### Delete a DB Config
+Cache will be deleted automatically after successfull delete.
+```php 
+use Nzsakib\DbConfig\DbConfig;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+$name = 'facebook';
+try {
+    $deletedConfig = (new DbConfig)->deleteByName($name);
+    // deleted successfully 
+} catch (ModelNotFoundException $e) {
+    // specified name does not exists in database 
+}
+
+// Or delete the config by primary key `id` 
+$id = request('id'); 
+try {
+    $deletedConfig = (new DbConfig)->deleteById($id);
+    // deleted successfully 
+} catch (ModelNotFoundException $e) {
+    // specified id does not exists in database 
+}
+```
+## Publish the package config and migration files
 ```bash 
 php artisan vendor:publish --provider="Nzsakib\DbConfig\DbConfigServiceProvider" --tag="config"
 php artisan vendor:publish --provider="Nzsakib\DbConfig\DbConfigServiceProvider" --tag="migrations"
