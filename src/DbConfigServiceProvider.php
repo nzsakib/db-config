@@ -2,7 +2,6 @@
 
 namespace Nzsakib\DbConfig;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 
 class DbConfigServiceProvider extends ServiceProvider
@@ -68,10 +67,10 @@ class DbConfigServiceProvider extends ServiceProvider
      */
     protected function insertNewConfiguration()
     {
-        // $toMerge = (new DbConfig())->getCachedData();
+        $toMerge = (new DbConfig())->getCachedData();
 
-        // foreach ($toMerge as $key => $value) {
-        //     config()->set($key, $value);
-        // }
+        foreach ($toMerge as $key => $value) {
+            config()->set($key, $value);
+        }
     }
 }

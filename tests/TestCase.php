@@ -2,8 +2,8 @@
 
 namespace Nzsakib\DbConfig\Tests;
 
-use Nzsakib\DbConfig\DbConfigServiceProvider;
 use Orchestra\Testbench\TestCase as TestbenchTestCase;
+use Nzsakib\DbConfig\Tests\provider\DbConfigServiceProvider;
 
 class TestCase extends TestbenchTestCase
 {

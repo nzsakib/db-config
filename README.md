@@ -18,6 +18,15 @@ composer require nzsakib/db-config
 
 ## Usage
 
+#### Facade or Implementation Class? 
+You can either use facade or direct implementation class to work. 
+```php 
+// You can use following facade
+\Nzsakib\DbConfig\Facades\CustomConfig::getCollection();
+// Or you can use the implementation below 
+(new \Nzsakib\DbConfig\DbConfig())->getCollection();
+```
+
 #### Get All Configurations as collection from DB 
 ```php 
 use Nzsakib\DbConfig\DbConfig;
@@ -103,6 +112,18 @@ try {
     // specified id does not exists in database 
 }
 ```
+#### Get Eloquent DB Query to Work With Data 
+```php
+use Nzsakib\DbConfig\DbConfig;
+
+$query = (new DbConfig)->getQuery(); 
+// Returns Builder instance to underlying config table Model
+// You can run custom query on it 
+$query->where('name', 'facebook')->delete();
+// facebook config row is deleted from DB
+
+```
+
 ## Publish the package config and migration files
 ```bash 
 php artisan vendor:publish --provider="Nzsakib\DbConfig\DbConfigServiceProvider" --tag="config"

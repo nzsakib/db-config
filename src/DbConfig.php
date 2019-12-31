@@ -5,7 +5,9 @@ namespace Nzsakib\DbConfig;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Builder;
 use Nzsakib\DbConfig\Models\Configuration;
+use Illuminate\Database\Eloquent\Collection;
 
 class DbConfig
 {
@@ -24,6 +26,26 @@ class DbConfig
                     return $config->value;
                 })
                 ->toArray();
+    }
+
+    /**
+     * Get all custom config from database
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getCollection(): Collection
+    {
+        return Configuration::all();
+    }
+
+    /**
+     * Get Eloquent query to operate on from controller
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQuery(): Builder
+    {
+        return Configuration::query();
     }
 
     /**
@@ -80,7 +102,7 @@ class DbConfig
      *
      * @param integer $id
      * @param string $name
-     * @param mixed $value
+     * @param mixed $newValue
      * @return \Nzsakib\DbConfig\Models\Configuration
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */

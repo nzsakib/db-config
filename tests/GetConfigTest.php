@@ -2,10 +2,11 @@
 
 namespace Nzsakib\DbConfig;
 
-use Illuminate\Support\Arr;
 use Nzsakib\DbConfig\Tests\TestCase;
+use Illuminate\Database\Eloquent\Builder;
 use Nzsakib\DbConfig\Facades\CustomConfig;
 use Nzsakib\DbConfig\Models\Configuration;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GetConfigTest extends TestCase
@@ -73,12 +74,22 @@ class GetConfigTest extends TestCase
         $config = CustomConfig::get();
 
         $this->assertCount(2, $config['services']);
-        // dd($config);
+    }
 
-        // $toMerge = Arr::dot($config);
+    /** @test */
+    public function it_can_get_all_config_from_db_as_collection()
+    {
+        factory(Configuration::class, 5)->create();
 
-        // foreach ($toMerge as $key => $value) {
-        //     config()->set($key, $value);
-        // }
+        $collection = CustomConfig::getCollection();
+
+        $this->assertInstanceOf(Collection::class, $collection);
+        $this->assertCount(5, $collection);
+    }
+
+    /** @test */
+    public function it_can_get_eloquent_query_builder_to_run_custom_query()
+    {
+        $this->assertInstanceOf(Builder::class, CustomConfig::getQuery());
     }
 }
