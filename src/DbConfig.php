@@ -47,7 +47,15 @@ class DbConfig
         return $flatted;
     }
 
-    public function set(string $name, $value)
+    /**
+     * Set a new config to db
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return \Nzsakib\DbConfig\Models\Configuration
+     * @throws InvalidArgumentException
+     */
+    public function set(string $name, $value): Configuration
     {
         $this->mustBeAssociativeArrayWhenMerging($name, $value);
 
@@ -62,7 +70,7 @@ class DbConfig
             'value' => $value,
         ]);
 
-        Cache::forget($this->cacheKey());
+        $this->invalidateCache();
 
         return $newConfig;
     }
@@ -74,18 +82,72 @@ class DbConfig
      * @param string $name
      * @param mixed $value
      * @return \Nzsakib\DbConfig\Models\Configuration
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function updateById(int $id, string $name, $value)
     {
-        $config = Configuration::find($id);
-
-        if (!$config) {
-            throw new Exception('The specified id does not exists in database.');
-        }
+        $config = Configuration::findOrFail($id);
 
         $config->name = $name;
         $config->value = $value;
         $config->save();
+
+        $this->invalidateCache();
+
+        return $config;
+    }
+
+    /**
+     * Update configuration by config name
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return \Nzsakib\DbConfig\Models\Configuration
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function updateByName(string $name, $value)
+    {
+        $config = Configuration::where('name', $name)->firstOrFail();
+
+        $config->value = $value;
+        $config->save();
+
+        $this->invalidateCache();
+
+        return $config;
+    }
+
+    /**
+     * Delete a config from db by name
+     *
+     * @param string $name
+     * @return \Nzsakib\DbConfig\Models\Configuration
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function deleteByName(string $name): Configuration
+    {
+        $config = Configuration::where('name', $name)->firstOrFail();
+
+        $config->delete();
+
+        $this->invalidateCache();
+
+        return $config;
+    }
+
+    /**
+     * Delete db config by its primary key `id`
+     *
+     * @param int $id
+     * @return Configuration
+     */
+    public function deleteById($id): Configuration
+    {
+        $config = Configuration::findOrFail($id);
+
+        $config->delete();
+
+        $this->invalidateCache();
 
         return $config;
     }
@@ -137,5 +199,15 @@ class DbConfig
     private function cacheKey(): string
     {
         return config('db-config.cache_key', 'app_config');
+    }
+
+    /**
+     * Invalidate the config cache
+     *
+     * @return boolean
+     */
+    private function invalidateCache(): bool
+    {
+        return cache()->forget($this->cacheKey());
     }
 }
