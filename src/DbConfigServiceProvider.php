@@ -67,10 +67,14 @@ class DbConfigServiceProvider extends ServiceProvider
      */
     protected function insertNewConfiguration()
     {
-        $toMerge = (new DbConfig())->getCachedData();
+        try {
+            $toMerge = (new DbConfig())->getCachedData();
 
-        foreach ($toMerge as $key => $value) {
-            config()->set($key, $value);
+            foreach ($toMerge as $key => $value) {
+                config()->set($key, $value);
+            }
+        } catch (\Exception $e) {
+            //
         }
     }
 }

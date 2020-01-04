@@ -14,7 +14,6 @@ You can install the package via composer:
 ```bash
 composer require nzsakib/db-config
 ```
-`Only supported laravel framework is laravel 5.6.*`
 
 ## Usage
 
